@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 class BillabongText extends StatelessWidget {
+  final String text;
+  final double fontsize;
+  BillabongText(this.text, {this.fontsize});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("Instagram",textAlign: TextAlign.center, 
-            style: TextStyle(
-              fontSize: 60,fontFamily: "Billabong",
-            ),),
+    return Text(
+      "$text",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: fontsize,
+        fontFamily: "Billabong",
+      ),
     );
   }
 }

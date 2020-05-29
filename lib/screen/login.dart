@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/custom/billaBongText.dart';
+import 'package:instagram_clone/custom/cutsomButton.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -6,16 +8,98 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  var obSecure = true;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: ListView(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text("Instagram",textAlign: TextAlign.center, 
-            style: TextStyle(
-              fontSize: 60,fontFamily: "Billabong",
-            ),),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(10),
+                children: <Widget>[
+                  BillabongText(
+                    "Instagram",
+                    fontsize: 50,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Phone number,email or username",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(color: Colors.grey, width: 1),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextFormField(
+                    obscureText: obSecure,
+                    decoration: InputDecoration(
+                      hintText: "Password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(color: Colors.grey, width: 1),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                            obSecure ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () {
+                          setState(
+                            () {
+                              obSecure = !obSecure;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: CustomButton(
+                      "Login",
+                      color: Colors.purple,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    width: 1,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Don't have an acount ?",
+                    textAlign: TextAlign.center,
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Text(
+                      "SignUP",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
