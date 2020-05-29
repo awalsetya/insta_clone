@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/custom/billaBongText.dart';
 import 'package:instagram_clone/custom/cutsomButton.dart';
+import 'package:instagram_clone/screen/menu.dart';
+import 'package:instagram_clone/screen/registrasi.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -64,7 +66,14 @@ class _LoginState extends State<Login> {
                     height: 16,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Menu(),
+                        ),
+                      );
+                    },
                     child: CustomButton(
                       "Login",
                       color: Colors.purple,
@@ -91,7 +100,14 @@ class _LoginState extends State<Login> {
                     textAlign: TextAlign.center,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Registrasi(),
+                        ),
+                      );
+                    },
                     child: Text(
                       "SignUP",
                       textAlign: TextAlign.center,
