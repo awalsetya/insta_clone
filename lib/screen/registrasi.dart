@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/custom/RegistrasiForm.dart';
 import 'package:instagram_clone/custom/billaBongText.dart';
 import 'package:instagram_clone/custom/cutsomButton.dart';
 import 'package:http/http.dart' as http;
+import 'package:instagram_clone/model/loginModel.dart';
 import 'package:instagram_clone/network/network.dart';
 
 class Registrasi extends StatefulWidget {
@@ -12,7 +14,7 @@ class Registrasi extends StatefulWidget {
 }
 
 class _RegistrasiState extends State<Registrasi> {
-  var obseCure = true;
+  var obSecure = true;
   final _key = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -30,7 +32,7 @@ class _RegistrasiState extends State<Registrasi> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Processing"),
+            title: Text("Processing.."),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -38,7 +40,7 @@ class _RegistrasiState extends State<Registrasi> {
                 SizedBox(
                   height: 16,
                 ),
-                Text("Please wait..."),
+                Text("Please wait...")
               ],
             ),
           );
@@ -49,9 +51,28 @@ class _RegistrasiState extends State<Registrasi> {
       "password": passwordController.text.trim(),
       "name": nameController.text.trim(),
     });
-    final data = jsonDecode(response.body);
-    print(data);
-    Navigator.pop(context);
+    //final data = jsonDecode(response.body);
+    // int value = data['value'];
+    // String message = data['message'];
+    LoginModel model = LoginModel.api(jsonDecode(response.body));
+    if (model.value == 1) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text("${model.message}"),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          });
+    }
   }
 
   @override
@@ -65,7 +86,7 @@ class _RegistrasiState extends State<Registrasi> {
               child: Form(
                 key: _key,
                 child: ListView(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(16),
                   children: <Widget>[
                     BillabongText(
                       "Instagram",
@@ -74,80 +95,24 @@ class _RegistrasiState extends State<Registrasi> {
                     SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      validator: (e) {
-                        if (e.isEmpty)
-                          return "Please input email address";
-                        else
-                          return null;
+                    RegistrasiForm(
+                      emailController: emailController,
+                      nameController: nameController,
+                      passwordController: passwordController,
+                      usernameController: usernameController,
+                      obSecure: obSecure,
+                      showHiddenPassword: () {
+                        setState(() {
+                          obSecure = !obSecure;
+                        });
                       },
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        hintText: "Email",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey, width: 1),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: "Full Name",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey, width: 1),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    TextFormField(
-                      controller: usernameController,
-                      decoration: InputDecoration(
-                        hintText: "Username",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey, width: 1),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    TextFormField(
-                      controller: passwordController,
-                      obscureText: obseCure,
-                      decoration: InputDecoration(
-                          hintText: "Password",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 1),
-                          ),
-                          suffixIcon: IconButton(
-                              icon: Icon(obseCure
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
-                              onPressed: () {
-                                setState(() {
-                                  obseCure = !obseCure;
-                                });
-                              })),
-                    ),
-                    SizedBox(
-                      height: 16,
                     ),
                     InkWell(
                       onTap: () {
                         cek();
                       },
                       child: CustomButton(
-                        "Sign UP",
+                        "Sign up",
                         color: Colors.purple,
                       ),
                     ),
@@ -158,28 +123,33 @@ class _RegistrasiState extends State<Registrasi> {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    width: 1,
-                    color: Colors.purple,
-                  ),
-                ),
-              ),
+                  border: Border(
+                      top: BorderSide(
+                width: 1,
+                color: Colors.grey,
+              ))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "By signing ap, you agree to our",
+                    "By signing up, you agree to our",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey),
                   ),
                   InkWell(
                     onTap: () {},
                     child: Text(
-                      "Term & Policy",
+                      " Terms &",
                       textAlign: TextAlign.center,
                     ),
-                  )
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Text(
+                      " Policy",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
             )
