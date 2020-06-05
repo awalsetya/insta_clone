@@ -8,6 +8,7 @@ import 'package:instagram_clone/network/network.dart';
 import 'package:instagram_clone/screen/menu.dart';
 import 'package:instagram_clone/screen/registrasi.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,7 +18,21 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  LoginModel model;
+  String username;
+  getPref() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      username = pref.getString("username");
+      username != null
+          ? Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (contex) => Menu()))
+          : null;
+    });
+  }
+
   var obSecure = true;
+
   final _key = GlobalKey<FormState>();
 
   cek() {
@@ -52,10 +67,12 @@ class _LoginState extends State<Login> {
     //final data = jsonDecode(response.body);
     // int value = data['value'];
     // String message = data['message'];
-    LoginModel model = LoginModel.api(jsonDecode(response.body));
+    model = LoginModel.api(jsonDecode(response.body));
     print(model);
     if (model.value == 1) {
       Navigator.pop(context);
+      savePrev(
+          model.id, model.email, model.username, model.name, model.createdDate);
       //print(data);
       Navigator.push(context, MaterialPageRoute(builder: (context) => Menu()));
     } else {
@@ -74,6 +91,29 @@ class _LoginState extends State<Login> {
             );
           });
     }
+  }
+
+  savePrev(
+    String id,
+    String email,
+    String username,
+    String name,
+    String createdDate,
+  ) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      pref.setString("id", id);
+      pref.setString("email", email);
+      pref.setString("username", username);
+      pref.setString("name", username);
+      pref.setString("createdDate", createdDate);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPref();
   }
 
   @override

@@ -56,7 +56,7 @@ class _RegistrasiState extends State<Registrasi> {
     // String message = data['message'];
     LoginModel model = LoginModel.api(jsonDecode(response.body));
     if (model.value == 1) {
-      Navigator.pop(context);
+      Navigator.pop(context); 
     } else {
       Navigator.pop(context);
       showDialog(

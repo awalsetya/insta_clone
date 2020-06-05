@@ -4,6 +4,7 @@ import 'package:instagram_clone/screen/menu/home.dart';
 import 'package:instagram_clone/screen/menu/profile.dart';
 import 'package:instagram_clone/screen/menu/searching.dart';
 import 'package:instagram_clone/screen/menu/uploading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Menu extends StatefulWidget {
   @override
@@ -12,6 +13,22 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   int selectIndex = 0;
+  String username, email;
+  getPref() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      username = pref.getString("username");
+      email = pref.getString("email");
+    });
+    print("email adrress: $email, Username : $username");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPref();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
